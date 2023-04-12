@@ -28,6 +28,13 @@ def corrections(sheet):
         end_color='ccccff'
     )
 
+    sheet.unmerge_cells(
+        start_row = 13,
+        start_column = 19,
+        end_row = 13,
+        end_column = 20
+    )
+
     # row 2 and 3
     row23 = [2,3]
     for row in row23:
@@ -75,8 +82,8 @@ def corrections(sheet):
         end_column = 18
     )
 
-    # delete column 20
-    sheet.delete_cols(19,2)
+    # delete column (all ending ones)
+    sheet.delete_cols(19,10)
 
 
 def addLogo(sheet):
@@ -110,10 +117,10 @@ def resizeColumns(sheet):
     sheet.column_dimensions['R'].width = 14.5
 
 
-def fontSize12(sheet):
+def fontSize12ndColorBlack(sheet):
     for i in range(1, sheet.max_row + 1):
         for cell in sheet[i]:
-            cell.font = openpyxl.styles.Font(size=12)
+            cell.font = openpyxl.styles.Font(size=12, color='000000')
 
 
 def applyBorder(sheet):
@@ -128,6 +135,17 @@ def applyBorder(sheet):
                 bottom=openpyxl.styles.borders.Side(border_style='thin')
             )
                           
+
+def printSetup(sheet):
+    sheet.print_area = f'A1:R{sheet.max_row}'
+
+    sheet.page_margins.left = 0.25
+    sheet.page_margins.right = 0.25
+    sheet.page_margins.top = 0.75
+    sheet.page_margins.bottom = 0.75
+
+    sheet.page_setup.fitToPage = True
+
 
 
 def formatTheFile(file: str):
@@ -150,10 +168,13 @@ def formatTheFile(file: str):
     resizeRows(sheet)
 
     # 5. change font size
-    fontSize12(sheet)
+    fontSize12ndColorBlack(sheet)
 
     # 6. apply border   
     applyBorder(sheet)
+
+    # 7. set print area
+    printSetup(sheet)
 
     spreadsheet.save(file)
 
