@@ -120,7 +120,7 @@ def resizeColumns(sheet):
 def fontSize12ndColorBlack(sheet):
     for i in range(1, sheet.max_row + 1):
         for cell in sheet[i]:
-            cell.font = openpyxl.styles.Font(size=12, color='000000')
+            cell.font = openpyxl.styles.Font(size=12, color='000000', bold=True)
 
 
 def applyBorder(sheet):
@@ -145,6 +145,13 @@ def printSetup(sheet):
     sheet.page_margins.bottom = 0.75
 
     sheet.page_setup.fitToPage = True
+
+
+def increaseFontSizeForRow(sheet, row, font_size):
+    for cell in sheet[row]:
+        cell.font = openpyxl.styles.Font(size=font_size)
+    
+    sheet.row_dimensions[row].height = 24
 
 
 
@@ -173,7 +180,10 @@ def formatTheFile(file: str):
     # 6. apply border   
     applyBorder(sheet)
 
-    # 7. set print area
+    # 7. highlight reference id row
+    increaseFontSizeForRow(sheet, 6, 18)
+
+    # 8. set print area
     printSetup(sheet)
 
     spreadsheet.save(file)
